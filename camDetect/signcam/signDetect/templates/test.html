@@ -1,0 +1,50 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <title>Sign Language Recognizer</title>
+    <meta charset='utf-8'>
+    <link rel="stylesheet" href="{% static 'main.css' %}" type="text/css" media="all">
+</head>
+<body>
+<div class="contentarea">
+    <h1>
+        Sign Language Recognizer
+
+    </h1>
+    <p id="result"></p>
+    <p>
+        Sign Language Detection
+    </p>
+
+
+  
+  </div>
+  <canvas id="canvas">
+  </canvas>
+    <p>
+        This is application for sign language interaction with Alexa
+    </p>
+</div>
+  <script>
+const recognition = new window.SpeechRecognition();
+recognition.onresult = (event) => {
+  const speechToText = event.results[0][0].transcript;
+}
+recognition.start();
+  </script>
+  <div class="camera" style="visibility:hidden;">
+    <video id="video"  style="visibility:hidden;">Video stream not available.</video> 
+<script src="https://code.jquery.com/jquery-3.4.0.slim.min.js"></script>
+<script src="{% static 'capture.js' %}"></script>
+<script type="text/javascript">
+$( document ).ready(function() {
+    console.log( "ready!" );
+});
+
+</script>
+
+</body>
+
+
+</html>
