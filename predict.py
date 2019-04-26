@@ -17,7 +17,7 @@ import io
 MODEL_WEIGHTS_PATH_H5="model_BW.h5"
 MODEL_PATH_JSON="model_BW.json"
 gesture_list = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','OK GOOGLE','P','Q','R','S','STOP','T','U','V','W','X','Y','Z']
-
+print("len:",len(gesture_list))
 # initialize our Flask application and the Keras model
 app = flask.Flask(__name__)
 model = None
@@ -35,6 +35,7 @@ def load_new_model():
     model.compile(loss='binary_crossentropy',
               optimizer='rmsprop',
               metrics=['accuracy'])
+    model._make_predict_function()
 #     return loaded_model
 
 def prepare_image(image, target):
@@ -60,6 +61,7 @@ def predict():
 		if flask.request.files.get("image"):
 			# read the image in PIL format
 			image = flask.request.files["image"].read()
+
 			image = Image.open(io.BytesIO(image))
 
 			# preprocess the image and prepare it for classification
@@ -67,6 +69,8 @@ def predict():
 
 			# classify the input image and then initialize the list
 			# of predictions to return to the client
+			# 
+			
 			probs = model.predict(image)
 			preds = gesture_list[list(probs[0]).index(max(list(probs[0])))]
 			data["predictions"] = []

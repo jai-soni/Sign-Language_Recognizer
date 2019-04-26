@@ -12,7 +12,7 @@
         Sign Language Recognizer
 
     </h1>
-    <p id="result"></p>
+    
     <p>
         Sign Language Detection
     </p>
@@ -22,6 +22,10 @@
   </div>
   <canvas id="canvas">
   </canvas>
+  <input type="text" name="q" id="transcript" placeholder="Speak" />
+   <img onclick="startDictation()" src="//i.imgur.com/cHidSVu.gif" />
+  <p id="result_cur"></p>
+  <p id="result"></p>
     <p>
         This is application for sign language interaction with Alexa
     </p>
@@ -43,7 +47,35 @@ $( document ).ready(function() {
 });
 
 </script>
+<script>
 
+  function startDictation() {
+
+    if (window.hasOwnProperty('webkitSpeechRecognition')) {
+
+      var recognition = new webkitSpeechRecognition();
+
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.lang = "en-US";
+      recognition.start();
+
+      recognition.onresult = function(e) {
+        document.getElementById('transcript').value
+                                 = e.results[0][0].transcript;
+        recognition.stop();
+        document.getElementById('labnol').submit();
+      };
+
+      recognition.onerror = function(e) {
+        recognition.stop();
+      }
+
+    }
+  }
+
+</script>
 </body>
 
 

@@ -26,6 +26,7 @@
     canvas = document.getElementById('canvas');
     photo = document.getElementById('photo');
     startbutton = document.getElementById('startbutton');
+    result_cur = document.getElementById('result_cur');
     result = document.getElementById('result');
 
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
@@ -83,7 +84,7 @@
   // other changes before drawing it.
 
 
-
+var count = 0;
   var t=setInterval(takepicture,100);
 
     function takepicture() {
@@ -108,20 +109,24 @@
         "data": data2,
         "text": prev_text
       }
-      
-      xhttp.open("POST", '/test/saveImage',true);
+      count = count+1;
+    if(count == 10){
+      count=0
+       xhttp.open("POST", '/test/saveImage',true);
       xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
       xhttp.send(JSON.stringify(post_data));
       xhttp.onreadystatechange = function() {
         if (this.status == 200) {
-          text = text + this.responseText; 
-          // result.innerHTML = text;
-          if(true){
-            var msg = new SpeechSynthesisUtterance(text);
+          text = this.responseText; 
+          result.innerHTML =  text;
+          if(this.responseText.indexOf('STOP') >= 0){
+            var msg = new SpeechSynthesisUtterance(text.replace('STOP',''));
             window.speechSynthesis.speak(msg); 
           }
         }
       };
+    }
+     
 
     } else {
       clearphoto();
